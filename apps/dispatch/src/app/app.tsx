@@ -1,4 +1,5 @@
 import React, { Suspense, lazy } from 'react';
+import Intake from './modules/intake';
 
 const Home = lazy(() => import('./Home'));
 
@@ -13,6 +14,7 @@ export const App = () => {
         <Suspense fallback={<div>Loading...</div>}>
           <Home />
         </Suspense>
+        <Intake />
       </main>
     </>
   );
