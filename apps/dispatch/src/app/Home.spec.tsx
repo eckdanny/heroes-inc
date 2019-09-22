@@ -1,9 +1,10 @@
-import { cleanup, getByText, render, wait } from '@testing-library/react';
 import React from 'react';
+import { cleanup, getByText, render, wait } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import App from './app';
 
-describe('App', () => {
+import Home from './Home';
+
+describe(' Home', () => {
   afterEach(() => {
     delete global['fetch'];
     cleanup();
@@ -18,7 +19,7 @@ describe('App', () => {
 
     const { baseElement } = render(
       <BrowserRouter>
-        <App />
+        <Home />
       </BrowserRouter>
     );
     await wait(() => getByText(baseElement, 'my message'));

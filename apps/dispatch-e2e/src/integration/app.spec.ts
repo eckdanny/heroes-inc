@@ -4,6 +4,6 @@ describe('dispatch', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {
-    getGreeting().contains('Welcome to dispatch!');
+    getGreeting().contains('App Shell');
   });
 });

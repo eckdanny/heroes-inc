@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { Message } from '@heros-inc/api-interfaces';
+import React, { Suspense, lazy } from 'react';
+
+const Home = lazy(() => import('./Home'));
 
 export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
-
-  useEffect(() => {
-    fetch('/api')
-      .then(r => r.json())
-      .then(setMessage);
-  }, []);
-
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to dispatch!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png"
-        />
-      </div>
-      <div>{m.message}</div>
+      <h1>This is the App Shell!</h1>
+      <p>
+        Contents in the <code>main</code> element below are lazily loaded!
+      </p>
+      <main>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Home />
+        </Suspense>
+      </main>
     </>
   );
 };
