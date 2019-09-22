@@ -12,11 +12,11 @@ app.use(bodyParser.json());
 
 const greeting: Message = { message: 'Hello world!' };
 
-app.get('/api', (req, res) => {
+app.get('/', (req, res) => {
   res.send(greeting);
 });
 
-app.get('/api/heroes', (req: Request, res: Response) => {
+app.get('/heroes', (req: Request, res: Response) => {
   const payload: IHero[] = [
     { id: '1', name: 'Superman', skills: [], vips: [] },
     { id: '2', name: 'Batman', skills: [], vips: [] },
