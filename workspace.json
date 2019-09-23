@@ -219,6 +219,62 @@
           }
         }
       }
+    },
+    "data": {
+      "root": "apps/data",
+      "sourceRoot": "apps/data/src",
+      "projectType": "application",
+      "prefix": "data",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/data",
+            "main": "apps/data/src/main.ts",
+            "tsConfig": "apps/data/tsconfig.app.json",
+            "assets": ["apps/data/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/data/src/environments/environment.ts",
+                  "with": "apps/data/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "data:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "config": "apps/data/.eslintrc",
+            "tsConfig": [
+              "apps/data/tsconfig.app.json",
+              "apps/data/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/data/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/data/jest.config.js",
+            "tsConfig": "apps/data/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {
