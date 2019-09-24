@@ -6,6 +6,7 @@ import * as bodyParser from 'body-parser';
 import { Message, IHero } from '@heros-inc/api-interfaces';
 import config from './ormconfig';
 import { Routes } from './routes';
+import { User } from './entity/user.entity';
 
 (async () => {
   let connection: Connection;
@@ -43,6 +44,23 @@ import { Routes } from './routes';
   });
 
   const server = app.listen(process.env.API_PORT);
+
+  // insert new users for test
+  await connection.manager.save(
+    connection.manager.create(User, {
+      firstName: 'Timber',
+      lastName: 'Saw',
+      age: 27
+    })
+  );
+  await connection.manager.save(
+    connection.manager.create(User, {
+      firstName: 'Phantom',
+      lastName: 'Assassin',
+      age: 24
+    })
+  );
+
   server.on('listening', () =>
     console.log(`Listening on port ${process.env.API_PORT}`)
   );

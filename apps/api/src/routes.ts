@@ -1,11 +1,13 @@
 import { UserController } from './controller/UserController';
 
-export const Routes: {
-  method: string;
+type ExpressTypeORMRoute = {
+  method: 'get' | 'post' | 'put' | 'delete';
   route: string;
-  controller: Function;
+  controller: NewableFunction;
   action: string;
-}[] = [
+};
+
+export const Routes: ExpressTypeORMRoute[] = [
   {
     method: 'get',
     route: '/users',
