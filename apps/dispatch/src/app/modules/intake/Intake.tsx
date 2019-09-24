@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { IHero } from '@heros-inc/api-interfaces';
+
+type IUser = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  age: number;
+};
 
 type IntakeProps = {};
 
 const Intake: React.FC<IntakeProps> = () => {
-  const [heroes, setHeroes] = useState<IHero[]>(null);
+  const [users, setUsers] = useState<IUser[]>(null);
   useEffect(() => {
-    fetch('/api/heroes')
+    fetch('/api/users')
       .then(r => r.json())
       .then(
-        r => setHeroes(r),
+        r => setUsers(r),
         err => {
           debugger;
         }
@@ -19,10 +25,12 @@ const Intake: React.FC<IntakeProps> = () => {
     <div>
       <h3>Heroes</h3>
       <div>Hello world from Intake!</div>
-      {heroes && heroes.length && (
+      {users && users.length && (
         <ul>
-          {heroes.map(hero => (
-            <li key={hero.id}>{hero.name}</li>
+          {users.map(hero => (
+            <li key={hero.id}>
+              <pre>{JSON.stringify(hero, null, 2)}</pre>
+            </li>
           ))}
         </ul>
       )}

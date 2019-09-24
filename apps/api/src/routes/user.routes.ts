@@ -1,13 +1,7 @@
-import { UserController } from './controller/UserController';
+import { UserController } from '../controller/user.controller';
+import { ExpressRoute } from './route-helpers';
 
-type ExpressTypeORMRoute = {
-  method: 'get' | 'post' | 'put' | 'delete';
-  route: string;
-  controller: NewableFunction;
-  action: string;
-};
-
-export const Routes: ExpressTypeORMRoute[] = [
+export const userRoutes: ExpressRoute[] = [
   {
     method: 'get',
     route: '/users',

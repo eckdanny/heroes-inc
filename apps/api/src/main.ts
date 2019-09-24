@@ -3,10 +3,12 @@ import { createConnection, Connection } from 'typeorm';
 import { Request, Response } from 'express';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import { Message, IHero } from '@heros-inc/api-interfaces';
 import config from './ormconfig';
-import { Routes } from './routes';
+import { heroRoutes } from './routes/hero.routes';
+import { userRoutes } from './routes/user.routes';
+
 import { User } from './entity/user.entity';
+import { Hero } from './entity/hero.entity';
 
 (async () => {
   let connection: Connection;
@@ -21,7 +23,7 @@ import { User } from './entity/user.entity';
   const app = express();
   app.use(bodyParser.json());
 
-  Routes.forEach(route => {
+  [...heroRoutes, ...userRoutes].forEach(route => {
     (app as any)[route.method](
       route.route,
       (req: Request, res: Response, next: Function) => {
@@ -46,18 +48,24 @@ import { User } from './entity/user.entity';
   const server = app.listen(process.env.API_PORT);
 
   // insert new users for test
+  // await connection.manager.save(
+  //   connection.manager.create(User, {
+  //     firstName: 'Timber',
+  //     lastName: 'Saw',
+  //     age: 27
+  //   })
+  // );
+  // await connection.manager.save(
+  //   connection.manager.create(User, {
+  //     firstName: 'Phantom',
+  //     lastName: 'Assassin',
+  //     age: 24
+  //   })
+  // );
+  // insert some heroes...
   await connection.manager.save(
-    connection.manager.create(User, {
-      firstName: 'Timber',
-      lastName: 'Saw',
-      age: 27
-    })
-  );
-  await connection.manager.save(
-    connection.manager.create(User, {
-      firstName: 'Phantom',
-      lastName: 'Assassin',
-      age: 24
+    connection.manager.create(Hero, {
+      name: 'Batman'
     })
   );
 

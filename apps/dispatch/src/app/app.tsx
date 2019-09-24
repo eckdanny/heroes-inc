@@ -1,46 +1,31 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useContext } from 'react';
 import { Route, NavLink as RouterNavLink } from 'react-router-dom';
-import { NavLink } from 'reactstrap';
-import { Header, Brand } from '@heros-inc/ui';
+import { Header, Brand, Nav } from '@heros-inc/ui';
+import { Context as RouterContext } from './core/routing';
 
 const Home = lazy(() => import('./Home'));
 const Intake = lazy(() => import('./modules/intake'));
-const Dashboard = () => <div>COMMING SOON...</div>;
+const Directory = lazy(() => import('./modules/directory'));
+const Dashboard = () => <div>Dashboard COMMING SOON...</div>;
+const Dispatch = () => <div>Dispatch COMMING SOON...</div>;
 
 export const App = () => {
+  const routerContext = useContext(RouterContext);
+  routerContext.setRoutes([
+    { path: '/', exact: true, name: 'Home', component: Home },
+    { path: '/directory', name: 'Directory', component: Directory },
+    { path: '/intake', name: 'Intake', component: Intake },
+    { path: '/dispatch', name: 'Dispatch', component: Dispatch },
+    { path: '/dashboad', name: 'Dashboard', component: Dashboard }
+  ]);
   return (
     <>
-      <Header
-        nav={
-          <nav className="nav my-2 my-md-0 mr-md-3">
-            {[
-              ['/', 'Home'],
-              ['/directory', 'Directory'],
-              ['/intake', 'Intake'],
-              ['/dispatch', 'Dispatch'],
-              ['/dashboard', 'Dashboard']
-            ].map(([route, name]) => (
-              <li className="nav-item" key={route}>
-                <NavLink
-                  to={route}
-                  exact
-                  tag={RouterNavLink}
-                  className="p-2"
-                  activeClassName="active disabled"
-                >
-                  {name}
-                </NavLink>
-              </li>
-            ))}
-          </nav>
-        }
-        brand={<Brand />}
-      />
+      <Header brand={<Brand />} nav={<Nav routes={routerContext.routes} />} />
       <main className="container">
-        <Suspense fallback={<div>Loading...</div>}>
-          <Route path="/" exact component={Home} />
-          <Route path="/intake" component={Intake} />
-          <Route path="/dashboard" component={Dashboard} />
+        <Suspense fallback={<div>Loading Service Module...</div>}>
+          {routerContext.routes.map(route => (
+            <Route {...route} key={route.path as string} />
+          ))}
         </Suspense>
       </main>
     </>
