@@ -7,5 +7,11 @@ export const heroRoutes: ExpressRoute[] = [
     route: '/heroes',
     controller: HeroController,
     action: 'all'
+  },
+  {
+    method: 'get',
+    route: '/heroes/:heroId',
+    controller: HeroController,
+    action: 'getById'
   }
 ];

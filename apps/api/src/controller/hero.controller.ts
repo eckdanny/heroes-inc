@@ -8,6 +8,10 @@ export class HeroController {
     return this.heroRepository.find();
   }
 
+  async getById(req: Request, res: Response, next: NextFunction) {
+    return this.heroRepository.findOne(req.params.heroId);
+  }
+
   async save(req: Request, res: Response, next: NextFunction) {
     return this.heroRepository.save(req.body);
   }

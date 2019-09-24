@@ -63,11 +63,11 @@ import { Hero } from './entity/hero.entity';
   //   })
   // );
   // insert some heroes...
-  await connection.manager.save(
-    connection.manager.create(Hero, {
-      name: 'Batman'
-    })
-  );
+  // await connection.manager.save(
+  //   connection.manager.create(Hero, {
+  //     name: 'Spider Man'
+  //   })
+  // );
 
   server.on('listening', () =>
     console.log(`Listening on port ${process.env.API_PORT}`)
