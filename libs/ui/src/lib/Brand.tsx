@@ -18,7 +18,7 @@ export const Brand: React.FC<BrandProps> = props => {
 };
 
 Brand.defaultProps = {
-  companyName: 'Heroes Inc.'
+  companyName: 'Heroes, Inc'
 };
 
 export default Brand;

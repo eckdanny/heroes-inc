@@ -14,7 +14,7 @@ export const HeroDetailView: React.FC<
   const [hero, setHero] = useState<IHero>(null);
   useEffect(() => {
     setStatus('BUSY');
-    fetch(`/api/heroes/${match.params.id}`)
+    fetch(`/api/heroes/${match.params.heroId}`)
       .then(r => r.json())
       .then(heroes => {
         setStatus('COMPLETE');
@@ -22,5 +22,10 @@ export const HeroDetailView: React.FC<
       })
       .catch(err => setStatus('ERROR'));
   }, []);
-  return <div>{hero && <pre>{JSON.stringify(hero, null, 2)}</pre>}</div>;
+  return (
+    <div>
+      <h3>I am the HeroDetailView</h3>
+      {hero && <pre>{JSON.stringify(hero, null, 2)}</pre>}
+    </div>
+  );
 };

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Route, RouteComponentProps, Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
+import { RouteComponentProps, Link } from 'react-router-dom';
 import { IHero } from '@heros-inc/api-interfaces';
+import { Alert } from 'reactstrap';
 import './HeroListView.scss';
 
 type httpStatus = 'BUSY' | 'COMPLETE' | 'ERROR';
@@ -33,6 +35,14 @@ export const HeroListView: React.FC<
           ))}
         </ul>
       )}
+      {heroes && heroes.length === 0 && (
+        <Alert color="danger" fade={false}>
+          <strong>Oh No's!</strong> It looks like you don't have any heroes yet!
+        </Alert>
+      )}
+      <Button to={`${match.path}/new`} tag={Link} color="success">
+        Add Hero
+      </Button>
     </div>
   );
 };

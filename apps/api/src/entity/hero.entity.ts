@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable
+} from 'typeorm';
+import { Skill } from './skill.entity';
 
 @Entity()
 export class Hero {
@@ -7,4 +14,8 @@ export class Hero {
 
   @Column()
   name: string;
+
+  @ManyToMany(type => Skill)
+  @JoinTable()
+  skills: Skill[];
 }

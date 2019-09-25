@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, RouteComponentProps, Link } from 'react-router-dom';
+import { Switch, Route, RouteComponentProps } from 'react-router-dom';
 import { HeroListView } from './HeroListView';
 import { HeroDetailView } from './HeroDetailView';
 import { CreateHero } from './CreateHero';
@@ -13,9 +13,11 @@ const Directory: React.FC<DirectoryProps & RouteComponentProps> = ({
   return (
     <div>
       <h3>Directory</h3>
-      <Route path={`${match.path}`} exact component={HeroListView} />
-      <Route path={`${match.path}/new`} component={CreateHero} />
-      <Route path={`${match.path}/:id`} component={HeroDetailView} />
+      <Switch>
+        <Route path={`${match.path}`} exact component={HeroListView} />
+        <Route path={`${match.path}/new`} exact component={CreateHero} />
+        <Route path={`${match.path}/:heroId`} component={HeroDetailView} />
+      </Switch>
     </div>
   );
 };
