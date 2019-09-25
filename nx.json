@@ -25,6 +25,9 @@
     },
     "data": {
       "tags": []
+    },
+    "event-listener": {
+      "tags": []
     }
   }
 }

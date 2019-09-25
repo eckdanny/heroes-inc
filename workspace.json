@@ -275,6 +275,62 @@
           }
         }
       }
+    },
+    "event-listener": {
+      "root": "apps/event-listener",
+      "sourceRoot": "apps/event-listener/src",
+      "projectType": "application",
+      "prefix": "event-listener",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/event-listener",
+            "main": "apps/event-listener/src/main.ts",
+            "tsConfig": "apps/event-listener/tsconfig.app.json",
+            "assets": ["apps/event-listener/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/event-listener/src/environments/environment.ts",
+                  "with": "apps/event-listener/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "event-listener:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "config": "apps/event-listener/.eslintrc",
+            "tsConfig": [
+              "apps/event-listener/tsconfig.app.json",
+              "apps/event-listener/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/event-listener/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/event-listener/jest.config.js",
+            "tsConfig": "apps/event-listener/tsconfig.spec.json"
+          }
+        }
+      }
     }
   },
   "cli": {
