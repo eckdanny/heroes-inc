@@ -10,3 +10,8 @@ import 'regenerator-runtime/runtime';
 /**
  * This file contains polyfills loaded on all browsers
  **/
+
+(window as any).global = window;
+// @ts-ignore
+window.Buffer = window.Buffer || require('buffer').Buffer;
+(window as any).process = require('process/browser');
