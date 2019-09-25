@@ -43,7 +43,10 @@ pool.connect((err, client) => {
           const description: string = parsed.description;
           if (description.includes('#vip')) {
             console.log(` => #vip message: ${msg.payload}`);
-            mqttClient.publish('VIP', msg.payload);
+            mqttClient.publish('VIP', msg.payload, {
+              qos: 0,
+              retain: false
+            });
           }
         } catch (err) {
           console.log(err);

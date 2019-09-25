@@ -10,7 +10,7 @@ export class IncidentController {
   }
 
   async getById(req: Request, res: Response, next: NextFunction) {
-    return this.incidentRepository.findOne(req.params.heroId);
+    return this.incidentRepository.findOne(req.params.incidentId);
   }
 
   async save(req: Request, res: Response, next: NextFunction) {

@@ -11,24 +11,31 @@ export const Notifier: React.FC = withRouter(({ history }) => {
   useEffect(() => {
     client.on('connect', () => {
       console.log('mqtt client connected');
-      client.subscribe(TOPIC, err => {
-        if (err) console.log(err);
-        console.log('mqtt subscribed to VIP msgs');
-      });
+      client.subscribe(
+        TOPIC,
+        {
+          qos: 0
+        },
+        err => {
+          if (err) console.log(err);
+          console.log('mqtt subscribed to VIP msgs');
+        }
+      );
     });
 
     client.on('message', (_, payload: Buffer) => {
       const msg = JSON.parse(payload.toString());
+      console.log(msg);
       toast.warn(msg.name, {
+        toastId: msg.id,
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: false,
         onClick: () => history.push(`/intake/${msg.id}`)
       });
-      console.log(JSON.parse(payload.toString()));
     });
 
     return () => client.subscribe(TOPIC);
-  });
+  }, []);
   return (
     <div>
       <ToastContainer />
