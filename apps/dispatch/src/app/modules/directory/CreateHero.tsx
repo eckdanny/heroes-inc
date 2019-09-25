@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
+import { IHero, ISkill } from '@heros-inc/api-interfaces';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,13 +11,14 @@ import {
   Label,
   Card,
   CardHeader,
-  CardBody,
-  CardTitle,
-  CardFooter
+  CardBody
 } from 'reactstrap';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { Formik } from 'formik';
 
 type CreateHeroProps = {};
+
+type CreateHeroPayload = Pick<IHero, 'name'> & { skills: Array<ISkill['id']> };
 
 export const CreateHero: React.FC<CreateHeroProps & RouteComponentProps> = ({
   match
@@ -51,90 +53,98 @@ export const CreateHero: React.FC<CreateHeroProps & RouteComponentProps> = ({
       <Card>
         <CardHeader tag="h4">Create Hero</CardHeader>
         <CardBody>
-          <Form>
-            <FormGroup>
-              <Label for="exampleEmail">Email</Label>
-              <Input
-                type="email"
-                name="email"
-                id="exampleEmail"
-                placeholder="with a placeholder"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="examplePassword">Password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="examplePassword"
-                placeholder="password placeholder"
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label for="exampleSelect">Select</Label>
-              <Input type="select" name="select" id="exampleSelect">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="exampleSelectMulti">Select Multiple</Label>
-              <Input
-                type="select"
-                name="selectMulti"
-                id="exampleSelectMulti"
-                multiple
-              >
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="exampleText">Text Area</Label>
-              <Input type="textarea" name="text" id="exampleText" />
-            </FormGroup>
-            <FormGroup>
-              <Label for="exampleFile">File</Label>
-              <Input type="file" name="file" id="exampleFile" />
-              <FormText color="muted">
-                This is some placeholder block-level help text for the above
-                input. It's a bit lighter and easily wraps to a new line.
-              </FormText>
-            </FormGroup>
-            <FormGroup tag="fieldset">
-              <legend>Radio Buttons</legend>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name="radio1" /> Option one is this and
-                  that—be sure to include why it's great
-                </Label>
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name="radio1" /> Option two can be
-                  something else and selecting it will deselect option one
-                </Label>
-              </FormGroup>
-              <FormGroup check disabled>
-                <Label check>
-                  <Input type="radio" name="radio1" disabled /> Option three is
-                  disabled
-                </Label>
-              </FormGroup>
-            </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input type="checkbox" /> Check me out
-              </Label>
-            </FormGroup>
-            <Button>Submit</Button>
-          </Form>
+          <Formik
+            initialValues={{
+              name: '',
+              skills: []
+            }}
+            onSubmit={(values, actions) => {
+              fetch('/api/heroes', {
+                method: 'POST',
+                body: JSON.stringify(values),
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+                .then(() => {
+                  actions.setSubmitting(false);
+                  actions.resetForm();
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            }}
+            render={props => {
+              return (
+                <Form onSubmit={props.handleSubmit}>
+                  <FormGroup>
+                    <Label for="name">Name:</Label>
+                    <Input
+                      id="newHeroFormName"
+                      type="text"
+                      name="name"
+                      placeholder="e.g.; Batman"
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      value={props.values.name}
+                      spellCheck={false}
+                    />
+                  </FormGroup>
+                  {skills && skills.length > 0 && (
+                    <FormGroup>
+                      <Label>Skills:</Label>
+                      <FormGroup check>
+                        {(skills as ISkill[]).map(skill => {
+                          return (
+                            <div className="form-check" key={skill.id}>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                value={skill.id}
+                                id={`newHeroFormSkills_${skill.id}`}
+                                onChange={(
+                                  e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                  const value = e.target.value;
+                                  const checked = e.target.checked;
+                                  const updatedSkills = checked
+                                    ? [...props.values.skills, value]
+                                    : props.values.skills.filter(
+                                        skillId => skillId !== value
+                                      );
+                                  props.setFieldValue('skills', updatedSkills);
+                                }}
+                                checked={props.values.skills.includes(skill.id)}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`newHeroFormSkills_${skill.id}`}
+                              >
+                                {skill.name}
+                              </label>
+                            </div>
+                          );
+                        })}
+                      </FormGroup>
+                    </FormGroup>
+                  )}
+                  {props.errors.name && (
+                    <div id="feedback">{props.errors.name}</div>
+                  )}
+                  <Button
+                    block
+                    type="submit"
+                    color="success"
+                    disabled={
+                      props.isValidating || props.isSubmitting || !props.isValid
+                    }
+                  >
+                    Submit
+                  </Button>
+                </Form>
+              );
+            }}
+          />
         </CardBody>
       </Card>
     </div>

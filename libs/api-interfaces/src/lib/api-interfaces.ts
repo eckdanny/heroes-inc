@@ -17,5 +17,5 @@ export interface IHero {
   id: string;
   name: string;
   skills: ISkill[];
-  vips: IVIP[];
+  // vips: IVIP[];
 }

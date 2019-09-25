@@ -9,6 +9,12 @@ export const heroRoutes: ExpressRoute[] = [
     action: 'all'
   },
   {
+    method: 'post',
+    route: '/heroes',
+    controller: HeroController,
+    action: 'save'
+  },
+  {
     method: 'get',
     route: '/heroes/:heroId',
     controller: HeroController,
