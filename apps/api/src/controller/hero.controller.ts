@@ -13,7 +13,6 @@ export class HeroController {
   }
 
   async save(req: Request, res: Response, next: NextFunction) {
-    console.log(req.body);
     return this.heroRepository.save(req.body);
   }
 }

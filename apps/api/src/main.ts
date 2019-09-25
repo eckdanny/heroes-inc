@@ -7,6 +7,7 @@ import config from './ormconfig';
 import { heroRoutes } from './routes/hero.routes';
 import { userRoutes } from './routes/user.routes';
 import { skillRoutes } from './routes/skill.routes';
+import { incidentRoutes } from './routes/incident.routes';
 
 import { Hero } from './entity/hero.entity';
 import { User } from './entity/user.entity';
@@ -25,27 +26,29 @@ import { Skill } from './entity/skill.entity';
   const app = express();
   app.use(bodyParser.json());
 
-  [...heroRoutes, ...userRoutes, ...skillRoutes].forEach(route => {
-    (app as any)[route.method](
-      route.route,
-      (req: Request, res: Response, next: Function) => {
-        const result = new (route.controller as any)()[route.action](
-          req,
-          res,
-          next
-        );
-        if (result instanceof Promise) {
-          result.then(result =>
-            result !== null && result !== undefined
-              ? res.send(result)
-              : undefined
+  [...heroRoutes, ...userRoutes, ...skillRoutes, ...incidentRoutes].forEach(
+    route => {
+      (app as any)[route.method](
+        route.route,
+        (req: Request, res: Response, next: Function) => {
+          const result = new (route.controller as any)()[route.action](
+            req,
+            res,
+            next
           );
-        } else if (result !== null && result !== undefined) {
-          res.json(result);
+          if (result instanceof Promise) {
+            result.then(result =>
+              result !== null && result !== undefined
+                ? res.send(result)
+                : undefined
+            );
+          } else if (result !== null && result !== undefined) {
+            res.json(result);
+          }
         }
-      }
-    );
-  });
+      );
+    }
+  );
 
   const server = app.listen(process.env.API_PORT, () => {
     console.log(`Listening on port ${process.env.API_PORT}`);

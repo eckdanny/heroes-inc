@@ -19,3 +19,9 @@ export interface IHero {
   skills: ISkill[];
   // vips: IVIP[];
 }
+
+export interface IIncident {
+  id: string;
+  name: string;
+  description: string;
+}
