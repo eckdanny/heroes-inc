@@ -31,7 +31,7 @@ pool.connect((err, client) => {
         DROP TRIGGER IF EXISTS watch_incidents_trigger ON incident;
 
         CREATE TRIGGER watch_incidents_trigger AFTER INSERT ON incident
-        FOR EACH ROW EXECUTE PROCEDURE notify_trigger();
+        FOR ROW EXECUTE PROCEDURE notify_trigger();
         `
     )
     .then(() => console.log('created trigger'))
